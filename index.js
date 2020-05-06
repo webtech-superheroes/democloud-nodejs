@@ -3,11 +3,21 @@ const Sequelize = require('sequelize')
 
 let sequelize
 
-sequelize = new Sequelize('profile', 'username', 'password', {
-    dialect: "mysql",
-    host: "localhost",
-    port: 3306
-})
+if(process.env.MYSQLCONNSTR_localdb) {
+    let result = process.env.MYSQLCONNSTR_localdb.split(";")
+    
+    sequelize = new Sequelize(result[0].split("=")[1], result[2].split("=")[1], result[3].split("=")[1], {
+        dialect: "mysql",
+        host: result[1].split("=")[1].split(":")[0],
+        port: result[1].split("=")[1].split(":")[1]
+    })
+} else {
+    sequelize = new Sequelize('profile', 'username', 'password', {
+        dialect: "mysql",
+        host: "localhost",
+        port: 3306
+    })
+}
 
 sequelize.authenticate().then(() => {
     console.log("Connected to database")
