@@ -14,7 +14,7 @@ if(process.env.MYSQLCONNSTR_localdb) {
 } else {
     sequelize = new Sequelize('profile', 'root', 'password', {
         dialect: "mysql",
-        host: "34.65.170.61",
+        host: "aatty9p2au0i0u.chzq885goq4p.us-east-1.rds.amazonaws.com",
         port: 3306
     })
 }
