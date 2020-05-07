@@ -12,9 +12,9 @@ if(process.env.MYSQLCONNSTR_localdb) {
         port: result[1].split("=")[1].split(":")[1]
     })
 } else {
-    sequelize = new Sequelize('profile', 'username', 'password', {
+    sequelize = new Sequelize('profile', 'root', 'password', {
         dialect: "mysql",
-        host: "localhost",
+        host: "34.65.170.61",
         port: 3306
     })
 }
