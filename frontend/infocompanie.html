@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Info Companie</title>
+    </head>
+    <body>
+        <label for="">CUI:</label>
+        <input type="text" name="cui" id="cui" />
+        <button onclick="getInfoCompanie()">Get INFO</button>
+        
+        
+        <script type="text/javascript">
+            async function getInfoCompanie() {
+                let cui = document.getElementById('cui').value
+                
+                let url = `https://api.openapi.ro/api/companies/${cui}`
+                
+                try {
+                    let response = await fetch(url, {
+                        headers: {
+                            'x-api-key': 'MA1_Eo6CC5FcyKkPzRsEDGQtx3dq8bdvQyBkyu_whhcG2L8x4g'
+                        }
+                    })
+                    let data = await response.json()
+                    console.log(data)
+                } catch(err) {
+                    console.log(err)
+                }
+            }
+        </script>
+    </body>
+</html>

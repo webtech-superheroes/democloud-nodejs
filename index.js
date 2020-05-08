@@ -1,6 +1,6 @@
 const express = require("express")
 const Sequelize = require('sequelize')
-
+const axios = require("axios")
 let sequelize
 
 if(process.env.MYSQLCONNSTR_localdb) {
@@ -38,6 +38,27 @@ app.use('/', express.static('frontend'))
 //definesc un endpoint de tip GET /hello
 app.get('/hello', (request, response) => {
    response.status(200).json({hello: process.env})
+})
+
+app.post('/github/:code', async (req, res) => {
+    const code = req.params.code
+    try {
+        let auth = await axios({
+            url: 'https://github.com/login/oauth/access_token',
+            method: 'POST',
+            data: {
+                client_id: '78ee08dd6f900a5e9a47',
+                client_secret: '8c5a5340527a6fe3c6345bfcf30cb3475d4959a8',
+                code: code,
+            },
+            headers: {
+                'Accept': 'application/json' 
+            }
+        })
+        res.status(200).json(auth['data'])
+    } catch(err) {
+        res.status(500).json(err)
+    }
 })
 
 app.get('/createdb', (request, response) => {

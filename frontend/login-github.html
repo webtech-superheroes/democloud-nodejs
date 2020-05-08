@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login With Github</title>
+    </head>
+    <body>
+        <button onClick="login()">Login With Github</button>
+        
+        <div id="content"></div>
+        
+        
+        <script type="text/javascript">
+            function login() {
+                const client_id = '78ee08dd6f900a5e9a47';
+                const redirect_url = window.location.href
+                const scope = 'repo'
+                const loginURL = `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=${scope}&redirect_url=${redirect_url}`
+                window.location.href = loginURL
+            }
+            
+            async function getAllRepos(username, token) {
+                let response = await fetch(`https://api.github.com/user/repos`, {
+                    headers: {
+                        'Authorization': `token ${token}`
+                    }
+                })
+                
+                let repos = await response.json();
+                console.log(repos)
+            }
+            
+            async function loadProfile(token) {
+                let response = await fetch(`https://api.github.com/user`, {
+                    headers: {
+                        'Authorization': `token ${token}`
+                    }
+                })
+                
+                let profile = await response.json()
+                let p = document.createElement('p')
+                
+                p.innerHTML = `Wellcome, ${profile.login}`
+                document.getElementById('content').appendChild(p)
+                
+                await getAllRepos(profile.login, token)
+            }
+            
+            async function getToken(code) {
+                let response = await fetch(`/github/${code}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                
+                let auth = await response.json()
+                return auth['access_token'];
+            }
+            
+            window.onload = async () => {
+                const queryString = window.location.search
+                const urlParams = new URLSearchParams(queryString)
+                
+                const code = urlParams.get('code')
+                console.log(code)
+                if(code) {
+                    let token = await getToken(code)
+                    await loadProfile(token)
+                } else {
+                    document.getElementById('content').innerHTML = 'Not logged in!'
+                }
+            }
+        </script>
+    </body>
+</html>

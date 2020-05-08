@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GitHub Repos</title>
+    </head>
+    <body>
+        <div id="content">
+            
+        </div>
+        <script type="text/javascript">
+            //fetch
+            //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+            window.onload = async () => {
+                let url = `https://api.github.com/users/webtechcsie/repos`
+                
+                let response = await fetch(url)
+                let data = await response.json()
+                console.log(data)
+                
+                let list = document.createElement('ul')
+                
+                data.forEach((el) => {
+                    let listItem = document.createElement('li')
+                    listItem.innerHTML = el.name
+                    list.appendChild(listItem)
+                })
+                
+                document.getElementById('content').appendChild(list)
+            }
+        </script>
+    </body>
+</html>
